@@ -14,7 +14,8 @@
     "page": "^1.8.6",
     "vue": "^2.5.11",
     "vue-materialize": "^1.0.0",
-    "vue-resource": "^1.5.1"
+    "vue-resource": "^1.5.1",
+    "vue-router": "^3.0.1"
   },
   "browserslist": [
     "> 1%",

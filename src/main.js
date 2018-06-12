@@ -14,7 +14,12 @@ const app = new Vue({
 
 Object.keys(routes).forEach(route => {
   const Component = require('./pages/' + window.routes[route] + '.vue').default
-  page(route, () => app.ViewComponent = Component)
+  page(route,(ctx) => {
+    // TEMP
+    localStorage.setItem('params', JSON.stringify(ctx.params))
+    app.ViewComponent = Component
+    
+  })
 })
 page('*', () => app.ViewComponent = require('./pages/404.vue'))
 page()
