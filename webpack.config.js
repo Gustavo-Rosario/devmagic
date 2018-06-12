@@ -76,6 +76,7 @@ module.exports = {
     extensions: ['*', '.js', '.vue', '.json']
   },
   devServer: {
+    public: 'devmagic-gmastersupreme.c9users.io',
     historyApiFallback: true,
     noInfo: true,
     overlay: true
