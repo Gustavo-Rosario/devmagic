@@ -8,8 +8,7 @@
         <div class="card">
           <div class="card-image">
             <img :src="user.avatar_url">
-            <div class="gradient-layer zindexM"></div>
-            <span class="card-title zindexH">{{user.name || 'Nome não definido'}}</span>
+            <span class="card-title">{{user.name || 'Nome não definido'}}</span>
           </div>
           <div class="card-content">
             <p>
@@ -37,9 +36,9 @@
             <p>{{repo.description || 'Sem descrição'}} <br>
                <span class="amber-text"><i class="material-icons">grade</i>{{repo.stargazers_count}}</span>
             </p>
-            <v-link :href="/repositorio/+(user.name+'/'+repo.name)" class="secondary-content">
+            <a  class="secondary-content">
               <i class="material-icons">visibility</i>
-            </v-link>
+            </a>
           </li>
         </ul>
       </div>
@@ -60,9 +59,7 @@
   Vue.use(VueRouter)
   Vue.use(VueResource)
   import $ from 'jquery'
-  // COMPONENTS
   import MainLayout from '../layouts/Main.vue'
-  import VLink from '../components/VLink.vue'
   
   export default {
     data(){
@@ -72,8 +69,10 @@
       }
     },
     components: {
-      MainLayout,
-      VLink
+      MainLayout
+    },
+    goPage(path,arg){
+      page(path+arg)
     },
     created() {
       // TEMP
@@ -84,33 +83,15 @@
           let repos = data.body; 
           repos.sort((a,b)=>(a.stargazers_count > b.stargazers_count) ? -1 : 1 )
           self.repos = repos
+          console.log(repos)
         })
         
         $('.progress').fadeOut()
         self.user = data.body
+        console.log(data.body)
       })
     },
     
     
   }
 </script>
-
-<style scoped>
-  .gradient-layer{
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, transparent , rgba(0,0,0,.5));;
-  }
-  
-  zindexH{
-    z-index: 9;
-  }
-  
-  zindexM{
-    z-index: 5;
-  }
-</style>

@@ -28,7 +28,7 @@
       <ul class="collection">
         <li class="collection-item" v-for="item in items">
           {{item.login}}
-          <a class="secondary-content" v-on:click="goPage('/detalhes/',item.login)">
+          <a class="secondary-content pointer" v-on:click="goPage('/detalhes/',item.login)">
             <i class="material-icons">visibility</i>
           </a>
         </li>
@@ -46,13 +46,12 @@
   import page from 'page'
   import MainLayout from '../layouts/Main.vue'
   
-  $(document).ready(function(){
-    $('.preloader-wrapper').hide()
-  })
-  
   export default {
     components: {
       MainLayout
+    },
+    created(){
+      $('.preloader-wrapper').hide()
     },
     data(){
       return {
@@ -72,6 +71,11 @@
       goPage(path,arg){
         page(path+arg)
       }
+    },
+    beforeMount(){
+      $(document).ready(function(){
+        $('.preloader-wrapper').hide()
+      })
     }
   }
   

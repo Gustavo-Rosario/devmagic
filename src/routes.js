@@ -1,4 +1,5 @@
 export default {
     '/': 'Home',
-    '/detalhes/:username': 'Detalhes'
+    '/detalhes/:username': 'Detalhes',
+    '/repositorio/:user/:repo' : 'Repo',
 }
