@@ -38,3 +38,16 @@
 span.title{
     font-weight: 500;
 }
+
+.sortBtns button{
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.sortBtns button:first-child{
+    border-radius: 5px 0 0 5px;
+}
+
+.sortBtns button:last-child{
+    border-radius: 0 5px 5px 0;
+}

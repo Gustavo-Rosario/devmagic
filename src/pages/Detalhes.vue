@@ -25,17 +25,43 @@
           <div class="card-action">
             Seguindo: {{user.following}}
           </div>
+          <div class="card-action">
+            <a target="_blank" :href="user.html_url" class="blue-text text-darken-3">
+              GitHub <i class="material-icons">link</i></a>
+          </div>
         </div>
         
       </div>  
+      
       <!-- REPOSITORIOS -->
       <div class="col s12 m6 l7">
+        <!-- ORDENAÇÂO-->
+        <h5>Ordenar por:</h5>
+        <div class="row">
+          <div class="sortBtns">
+            <!-- Por não estarem definidas as formas de organização, NOME, CRIACAO e ESTRELA foram adotados  -->
+            <!-- IMPORTANTE: para não fazer uma nova requisição ajax, o sort é feito por um metodo proprio -->
+            <button v-on:click="sortBy('stargazers_count')" class="sortActive btn col s4 m4 l4 amber darken-2">
+              Estrelas ↓
+            </button>
+            <button v-on:click="sortBy('name')" class="btn col s4 m4 l4 blue-grey darken-1">
+              Nome
+            </button>
+            <button v-on:click="sortBy('created_at')" class="btn col s4 m4 l4 blue darken-4">
+              Criação
+            </button>
+          </div>
+        </div>
+        
         <ul class="collection">
           <li class="collection-item avatar" v-for="repo in repos">
              <i class="material-icons circle">folder</i>
             <span class="title">{{repo.name}}</span>
             <p>{{repo.description || 'Sem descrição'}} <br>
                <span class="amber-text"><i class="material-icons">grade</i>{{repo.stargazers_count}}</span>
+            </p>
+            <p>
+              {{repo.created_at | formatDate}}
             </p>
             <v-link :href="/repositorio/+(user.name+'/'+repo.name)" class="secondary-content">
               <i class="material-icons">visibility</i>
@@ -54,11 +80,6 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import VueResource from 'vue-resource'
-  import VueRouter from 'vue-router'
-  Vue.use(VueRouter)
-  Vue.use(VueResource)
   import $ from 'jquery'
   // COMPONENTS
   import MainLayout from '../layouts/Main.vue'
@@ -73,7 +94,21 @@
     },
     components: {
       MainLayout,
-      VLink
+      VLink,
+    },
+    methods:{
+      sortBy(prop){
+        let type = $(event.target).data('type') || 'asc'
+        $('.sortActive').text((a,b)=> `${b.replace(/[↑↓]/g,'')}`).removeClass('sortActive').data('type','')
+        if(type == 'asc'){
+          this.repos.sort((a,b)=>( typeof a[prop] == "string" ? (a[prop].toLowerCase() > b[prop].toLowerCase() ? -1 : 1) : (a[prop] > b[prop] ? -1 : 1) ) )
+          $(event.target).text((a,b)=> `${b.replace(/[↑↓]/g,'')} ↓`).data('type','desc')
+        }else{
+          this.repos.sort((a,b)=>(typeof a[prop] == "string" ? (a[prop].toLowerCase() > b[prop].toLowerCase() ? 1 : -1) : (a[prop] > b[prop] ? 1 : -1) ) )
+          $(event.target).text((a,b)=> `${b.replace(/[↑↓]/g,'')} ↑`).data('type','asc')
+        }
+        $(event.target).addClass('sortActive')
+      },
     },
     created() {
       // TEMP
@@ -90,7 +125,8 @@
         self.user = data.body
       })
     },
-    
+    beforeMount(){
+    }
     
   }
 </script>
@@ -113,4 +149,9 @@
   zindexM{
     z-index: 5;
   }
+  
+  .sortBtns{
+    
+  }
+  
 </style>

@@ -1,6 +1,17 @@
 import Vue from 'vue'
 import page from 'page'
 import routes from './routes'
+import moment from 'moment'
+import VueResource from 'vue-resource'
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+Vue.use(VueResource)
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return moment(String(value)).format('MM/DD/YYYY')
+  }
+})
+
 
 window.routes = routes
 
