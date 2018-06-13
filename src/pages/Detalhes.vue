@@ -63,7 +63,7 @@
             <p>
               {{repo.created_at | formatDate}}
             </p>
-            <v-link :href="/repositorio/+(user.name+'/'+repo.name)" class="secondary-content">
+            <v-link :href="/repositorio/+(repo.owner.login+'/'+repo.name)" class="secondary-content">
               <i class="material-icons">visibility</i>
             </v-link>
           </li>

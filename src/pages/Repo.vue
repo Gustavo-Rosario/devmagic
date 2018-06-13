@@ -1,50 +1,18 @@
 <template>
   <main-layout>
-    <h3 class="page-title">Informações do usuário</h3>
+    <h3 class="page-title">Repositório</h3>
     <div class="row">
-      <!-- USUARIO -->
-      <div class="col s12 m6 l5">
-        
-        <div class="card">
-          <div class="card-image">
-            <img :src="user.avatar_url">
-            <span class="card-title">{{user.name || 'Nome não definido'}}</span>
-          </div>
-          <div class="card-content">
-            <p>
-              {{user.bio || 'Bio indisponível'}}
-            </p>
-          </div>
-          <div class="card-action">
-            {{user.email || 'Email indisponível'}}
-          </div>
-          <div class="card-action">
-            Seguidores: {{user.followers}}
-          </div>
-          <div class="card-action">
-            Seguindo: {{user.following}}
-          </div>
-        </div>
-        
-      </div>  
-      <!-- REPOSITORIOS -->
-      <div class="col s12 m6 l7">
-        <ul class="collection">
-          <li class="collection-item avatar" v-for="repo in repos">
-             <i class="material-icons circle">folder</i>
-            <span class="title">{{repo.name}}</span>
-            <p>{{repo.description || 'Sem descrição'}} <br>
-               <span class="amber-text"><i class="material-icons">grade</i>{{repo.stargazers_count}}</span>
-            </p>
-            <a  class="secondary-content">
-              <i class="material-icons">visibility</i>
-            </a>
-          </li>
-        </ul>
+      <h2>{{repo.name}}</h2>
+      <p>
+        {{repo.description || 'Descricção indisponível'}}
+      </p>
+      <div class="starcount amber darken-1 white-text">
+        <i class="material-icons left">star</i>
+        <span> {{repo.stargazers_count}}</span>
       </div>
-      
     </div>
     
+    <!-- LOADER -->
     <div class="progress">
       <div class="indeterminate"></div>
     </div>
@@ -53,41 +21,25 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import VueResource from 'vue-resource'
-  import VueRouter from 'vue-router'
-  Vue.use(VueRouter)
-  Vue.use(VueResource)
   import $ from 'jquery'
   import MainLayout from '../layouts/Main.vue'
   
   export default {
     data(){
       return {
-        user: {},
-        repos: {}
+        repo: {}
       }
     },
     components: {
       MainLayout
     },
-    goPage(path,arg){
-      page(path+arg)
-    },
     created() {
       // TEMP
       let self = this
       this.params = JSON.parse(localStorage.getItem('params'))
-      this.$http.get(`https://api.github.com/users/${this.params.username}`).then((data)=>{
-        this.$http.get(data.body.repos_url).then((data)=>{
-          let repos = data.body; 
-          repos.sort((a,b)=>(a.stargazers_count > b.stargazers_count) ? -1 : 1 )
-          self.repos = repos
-          console.log(repos)
-        })
-        
+      this.$http.get(`https://api.github.com/repos/${this.params.user}/${this.params.repo}`).then((data)=>{
         $('.progress').fadeOut()
-        self.user = data.body
+        self.repo = data.body
         console.log(data.body)
       })
     },
@@ -95,3 +47,22 @@
     
   }
 </script>
+
+<style scoped>
+  .starcount{
+    padding: 1rem .5rem;
+    border-radius: 5px;
+    line-height: 1.5;
+    width: auto;
+    display:inline-block;
+  }
+  .starcount i{
+    margin-top: -0.1rem;
+  }
+  .starcount span{
+    display: inline-block;
+    border-left: 3px solid white;
+    padding: 0 5px 0 15px;
+    font: 1.5rem bold Verdana, sans-serif;
+  }
+</style>
