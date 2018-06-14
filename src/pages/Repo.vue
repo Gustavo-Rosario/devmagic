@@ -1,10 +1,11 @@
 <template>
   <main-layout>
     <h3 class="page-title">Repositório</h3>
-    <div class="row">
-      <h2>{{repo.name}}</h2>
+    <div v-if="repo.owner" class="row">
+      <h2 class="title">{{repo.name}}</h2>
+      <h3 class="sub-title">Proprietário: {{repo.owner.login}}</h3>
       <p>
-        {{repo.description || 'Descricção indisponível'}}
+        {{repo.description || 'Descrição indisponível'}}
       </p>
       <div class="starcount amber darken-1 white-text">
         <i class="material-icons left">star</i>
