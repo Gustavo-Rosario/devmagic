@@ -3,11 +3,11 @@
     <h3 class="page-title">Informações do usuário</h3>
     <div class="row">
       <!-- USUARIO -->
-      <div class="col s12 m6 l5">
+      <div class="col s12 m6 l4">
         
         <div class="card">
           <div class="card-image">
-            <img :src="user.avatar_url">
+            <img :src="user.avatar_url || '/src/assets/default.png'">
             <div class="gradient-layer zindexM"></div>
             <span class="card-title zindexH">{{user.name || 'Nome não definido'}}</span>
           </div>
@@ -34,7 +34,7 @@
       </div>  
       
       <!-- REPOSITORIOS -->
-      <div class="col s12 m6 l7">
+      <div class="col s12 m6 l8">
         <!-- ORDENAÇÂO-->
         <h5>{{total_repos}} repos ordenados por:</h5>
         <div class="row">
@@ -69,7 +69,7 @@
               <i class="material-icons">chevron_left</i>
             </a>
           </li>
-          <li class="active" >
+          <li class="active blue darken-3" >
             <a class="actual">
               {{actual_page}}
             </a>
@@ -96,7 +96,7 @@
             <p>
               {{repo.created_at | formatDate}}
             </p>
-            <v-link :href="/repositorio/+(repo.owner.login+'/'+repo.name)" class="secondary-content">
+            <v-link :href="/repositorio/+(repo.owner.login+'/'+repo.name)" class="blue-text text-darken-3 secondary-content">
               <i class="material-icons">visibility</i>
             </v-link>
           </li>
@@ -114,7 +114,7 @@
               <i class="material-icons">chevron_left</i>
             </a>
           </li>
-          <li class="active" >
+          <li class="active blue darken-3" >
             <a class="actual">
               {{actual_page}}
             </a>
@@ -171,7 +171,7 @@
         $('.progress').fadeIn()
         this.prop = prop
         let self = this
-        let type = $(event.target).data('type') || 'desc'
+        let type = $(event.target).data('type') || 'asc'
         let url = `https://api.github.com/search/repositories?q=user:${this.user.login}&sort=${prop}&order=${type}&per_page=30&page=${this.actual_page}`
         this.$http.get(url).then((data)=>{
           // Links para proximas páginas
@@ -203,9 +203,9 @@
         if($(event.target).hasClass('sortBtn')){
           $('.sortActive').text((a,b)=> `${b.replace(/[↑↓]/g,'')}`).removeClass('sortActive').data('type','')
           if(type == 'asc'){
-            $(event.target).text((a,b)=> `${b.replace(/[↑↓]/g,'')} ↓`).data('type','desc')
+            $(event.target).text((a,b)=> `${b.replace(/[↑↓]/g,'')} ↑`).data('type','desc')
           }else{
-            $(event.target).text((a,b)=> `${b.replace(/[↑↓]/g,'')} ↑`).data('type','asc')
+            $(event.target).text((a,b)=> `${b.replace(/[↑↓]/g,'')} ↓`).data('type','asc')
           }
           $(event.target).addClass('sortActive')
         }

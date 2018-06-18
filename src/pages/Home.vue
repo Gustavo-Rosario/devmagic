@@ -3,29 +3,27 @@
     <!-- Body --> 
     <h3 class="page-title">Encontre um usuário do github</h3>
     <!-- Input pesquisa -->
-    <input id="username" type="search">
-    <button class="btn" v-on:click="getUser">
-      <i class="material-icons">search</i>
-    </button>
+    <form v-on:submit="getUser">
+      <div class="input-field">
+        <input id="username" type="search" required>
+        <label class="label-icon" for="search"><i class="material-icons search">search</i></label>
+        <i class="material-icons">close</i>
+      </div>
+    </form>
+    
+    <!--<input id="username" type="search">-->
+    <!--<button class="btn" v-on:click="getUser">-->
+    <!--  <i class="material-icons">search</i>-->
+    <!--</button>-->
     
     <div id="users">
       <!-- preloader -->
-      <div class="preloader-wrapper small active">
-        <div class="spinner-layer spinner-green-only">
-          <div class="circle-clipper left">
-            <div class="circle"></div>
-          </div>
-          <div class="gap-patch">
-            <div class="circle"></div>
-          </div>
-          <div class="circle-clipper right">
-            <div class="circle"></div>
-          </div>
-        </div>
+      <div class="progress">
+        <div class="indeterminate"></div>
       </div>
       
       <!-- Lista de usuarios retornados -->
-      <ul class="collection">
+      <ul class="collection" v-if="items.length > 0">
         <li class="collection-item" v-for="item in items">
           {{item.login}}
           <a class="secondary-content pointer" v-on:click="goPage('/detalhes/',item.login)">
@@ -51,7 +49,7 @@
       MainLayout
     },
     created(){
-      $('.preloader-wrapper').hide()
+      $('.progress').hide()
     },
     data(){
       return {
@@ -60,12 +58,13 @@
     },
     methods:{
       getUser(event){
+        event.preventDefault()
         let self = this
         let name = $('#username').val()
-        $('.preloader-wrapper').show()
+        $('.progress').show()
         this.$http.get(`https://api.github.com/search/users?q=${name}`).then((data)=>{
           self.items = data.body.items
-          $('.preloader-wrapper').hide()
+          $('.progress').hide()
         })
       },
       goPage(path,arg){
@@ -74,7 +73,14 @@
     },
     beforeMount(){
       $(document).ready(function(){
-        $('.preloader-wrapper').hide()
+        $('.progress').hide()
+        $('#username').keyup(function(){
+          if($(this).val() != 0){
+            $('.search').fadeOut()
+          }else{
+            $('.search').fadeIn()
+          }
+        })
       })
     }
   }
